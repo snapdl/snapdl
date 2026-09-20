@@ -14,7 +14,7 @@
         <h1 class="text-2xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-indigo-500">
             SNAP<span class="text-white">DL</span>
         </h1>
-        <span class="text-xs bg-indigo-900 text-indigo-200 py-1 px-3 rounded-full font-medium">v1.0 MVP</span>
+        <span class="text-xs bg-indigo-900 text-indigo-200 py-1 px-3 rounded-full font-medium">v1.0 Live</span>
     </header>
 
     <!-- Main Container / Universal Box -->
@@ -40,13 +40,14 @@
                 >
                 <button 
                     onclick="handleDownload()" 
+                    id="downloadBtnElement"
                     class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-8 py-4 rounded-xl transition shadow-lg shadow-indigo-600/30 cursor-pointer"
                 >
                     Download Now 🚀
                 </button>
             </div>
 
-            <!-- Platform Supported Icons Badge with Real SVGs -->
+            <!-- Platform Supported Icons Badge -->
             <div class="flex flex-wrap justify-center gap-3 text-slate-300 text-sm pt-2">
                 <!-- YouTube Badge -->
                 <div class="flex items-center gap-2 bg-slate-900 px-3.5 py-2 rounded-xl border border-slate-800 shadow-sm">
@@ -67,16 +68,11 @@
                 </div>
             </div>
 
-            <!-- Result Box (Hidden by default, will show after click) -->
+            <!-- Result Box (Hidden by default) -->
             <div id="resultBox" class="hidden mt-8 bg-slate-900 border border-slate-800 p-6 rounded-2xl text-left space-y-4">
-                <h3 class="text-lg font-bold text-indigo-300">Generated Download Options:</h3>
-                <div id="videoDetails" class="text-sm text-slate-300">
-                    <!-- Dynamic result will appear here -->
-                </div>
-                <div class="flex flex-wrap gap-3 pt-2">
-                    <a id="downloadBtn" href="#" target="_blank" class="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-2.5 px-6 rounded-lg text-sm transition">
-                        Download MP4 (HD)
-                    </a>
+                <h3 class="text-lg font-bold text-indigo-300">Generated Download Links:</h3>
+                <div id="videoDetails" class="text-sm text-slate-300 space-y-2">
+                    <!-- Dynamic links will populate here -->
                 </div>
             </div>
 
@@ -88,24 +84,52 @@
         &copy; 2026 SnapDL. Built for Speed & Scale.
     </footer>
 
-    <!-- Simple Frontend Logic Script -->
+    <!-- Frontend Backend-Connector Logic -->
     <script>
-        function handleDownload() {
+        async function handleDownload() {
             const url = document.getElementById('urlInput').value.trim();
             const resultBox = document.getElementById('resultBox');
             const videoDetails = document.getElementById('videoDetails');
+            const btn = document.getElementById('downloadBtnElement');
 
             if(!url) {
                 alert("Bhai pehle link toh paste kar!");
                 return;
             }
 
-            // Simple dummy simulation for MVP preview (Backend API will plug in here later)
+            // Loading state
+            btn.innerText = "Fetching...";
             resultBox.classList.remove('hidden');
-            videoDetails.innerHTML = `
-                <p><strong>Detected URL:</strong> <span class="text-slate-400 truncate block">${url}</span></p>
-                <p class="text-emerald-400 mt-1">✔ Link parsed successfully! Ready for download.</p>
-            `;
+            videoDetails.innerHTML = `<p class="text-yellow-400">⏳ Fetching video details from servers...</p>`;
+
+            try {
+                // TODO: Yahan apni RapidAPI ya Backend API ka endpoint daalna hai
+                // Example structure for API integration:
+                /*
+                const response = YOUR_API_FETCH_CALL...
+                const data = await response.json();
+                */
+
+                // Simulated success response display for testing structure
+                setTimeout(() => {
+                    videoDetails.innerHTML = `
+                        <p class="text-emerald-400 font-semibold">✔ Video found successfully!</p>
+                        <div class="flex flex-col gap-2 pt-2">
+                            <a href="${url}" target="_blank" class="bg-emerald-600 hover:bg-emerald-500 text-white font-medium py-2.5 px-4 rounded-lg text-center transition">
+                                Download HD Video (MP4)
+                            </a>
+                            <a href="${url}" target="_blank" class="bg-slate-800 hover:bg-slate-700 text-indigo-300 font-medium py-2.5 px-4 rounded-lg text-center transition">
+                                Download Audio Only (MP3)
+                            </a>
+                        </div>
+                    `;
+                    btn.innerText = "Download Now 🚀";
+                }, 1000);
+
+            } catch (error) {
+                videoDetails.innerHTML = `<p class="text-red-400">❌ Error fetching video. Please check the link.</p>`;
+                btn.innerText = "Download Now 🚀";
+            }
         }
     </script>
 </body>
